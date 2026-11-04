@@ -179,6 +179,17 @@ class OwnerControllerTests {
 	}
 
 	@Test
+	void processFindFormShowsTotalOwnerCount() throws Exception {
+		Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()),
+				org.springframework.data.domain.PageRequest.of(0, 5), 10);
+		when(this.owners.findByLastNameStartingWith(anyString(), any(Pageable.class))).thenReturn(tasks);
+		mockMvc.perform(get("/owners?page=1"))
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("totalItems", 10L))
+			.andExpect(content().string(org.hamcrest.Matchers.containsString("10 owners found")));
+	}
+
+	@Test
 	void processFindFormRedirectsOutOfBoundsPageToFirstPage() throws Exception {
 		for (int page : List.of(0, 2)) {
 			mockMvc.perform(get("/owners").param("page", Integer.toString(page)).param("lastName", "Franklin"))
