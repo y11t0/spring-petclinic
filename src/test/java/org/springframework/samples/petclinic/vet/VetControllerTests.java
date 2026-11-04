@@ -92,6 +92,21 @@ class VetControllerTests {
 	}
 
 	@Test
+	void showVetListHtmlShowsTotalCount() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/vets.html?page=1"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(org.hamcrest.Matchers.containsString("2 veterinarians")));
+	}
+
+	@Test
+	void showVetListHtmlShowsSingularCount() throws Exception {
+		given(this.vets.findAll(any(Pageable.class))).willReturn(new PageImpl<Vet>(Lists.newArrayList(james())));
+		mockMvc.perform(MockMvcRequestBuilders.get("/vets.html?page=1"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(org.hamcrest.Matchers.containsString("1 veterinarian<")));
+	}
+
+	@Test
 	void showVetListRedirectsOutOfBoundsPageToFirstPage() throws Exception {
 		for (int page : List.of(0, 2)) {
 			mockMvc.perform(get("/vets.html").param("page", Integer.toString(page)))
