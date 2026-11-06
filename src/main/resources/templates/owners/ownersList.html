@@ -5,6 +5,7 @@
 <body>
 
   <h2 th:text="#{owners}">Owners</h2>
+  <p id="owners-count" th:text="${totalItems == 1 ? '1 owner found' : totalItems + ' owners found'}">0 owners found</p>
 
   <table id="owners" class="table table-striped">
     <thead>
