@@ -5,6 +5,7 @@
 <body>
 
   <h2 th:text="#{vets}">Veterinarians</h2>
+  <p id="vet-count" th:text="${totalItems == 1} ? #{vetCount.one(${totalItems})} : #{vetCount.other(${totalItems})}">6 veterinarians</p>
 
   <table id="vets" class="table table-striped">
     <thead>
